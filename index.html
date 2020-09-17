@@ -1,0 +1,24 @@
+<html>
+	<head>
+		<title>Fichier d'exemple de prise en main</title>
+		<script src="jsgraphnode.js"></script>
+	</head>
+	<body>
+		<div>
+			<canvas id="first_gn"></canvas>
+		</div>
+		<script>
+			var oJGN = new jsgraphnode( 'first_gn', { css:{ width: '500px', height: '500px', border: '2px solid blue' } } );
+			oJGN.addRefShape( 'start', {
+				type: 'square',
+				data: { pos:{x:-10, y:-10}, size:50 },
+				shapes:[
+					{type: 'circle', data: { pos:{x:10, y:10}, radius:20 } }
+				]
+			} );
+			oJGN.addElement( 'start', {x:10, y:10} );
+			
+			oJGN.drawCanvas();
+		</script>
+	</body>
+</html>
