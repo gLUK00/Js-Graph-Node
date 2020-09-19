@@ -8,15 +8,17 @@
 			<canvas id="first_gn"></canvas>
 		</div>
 		<script>
-			var oJGN = new jsgraphnode( 'first_gn', { css:{ width: '500px', height: '500px', border: '2px solid blue' } } );
+			var oJGN = new jsgraphnode( 'first_gn', { css:{ width: '500px', height: '300px', border: '2px solid blue' },
+				options:{}  } );
+				//options:{ strokeStyle: 'green' } } );
 			oJGN.addRefShape( 'start', {
-				type: 'square',
-				data: { pos:{x:-10, y:-10}, size:50 },
+				type: 'circle',
+				data: { pos:{x:0, y:0}, radius:10, strokeStyle: 'orange' },
 				shapes:[
-					{type: 'circle', data: { pos:{x:10, y:10}, radius:20 } }
+					{type: 'rectangle', data: { pos:{x:-5, y:8}, width:10, height:5 } }
 				]
 			} );
-			oJGN.addElement( 'start', {x:10, y:10} );
+			oJGN.addElement( 'start', {x:50, y:30} );
 			
 			oJGN.drawCanvas();
 		</script>

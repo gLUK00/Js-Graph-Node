@@ -5,6 +5,9 @@ function jsgraphnode( sId, oProperties ){
 	this.oCanvas = this.oEle.getContext( '2d' );
 	this.oShapes = {};
 	this.oElements = {};
+	this.oOptions = { strokeStyle: 'black' };
+
+	this.oCanvas.strokeStyle = this.oOptions.strokeStyle;
 
 	// ajout d'une reference de forme
 	this.addRefShape = function( sName, oShape ){
@@ -29,10 +32,37 @@ function jsgraphnode( sId, oProperties ){
 	
 	// dessine une forme
 	this.drawShape = function( oShape, oPos ){
+
+		// determine la nouvelle position
+		var oNewPos = oPos;
+		if( oShape.data != undefined && oShape.data.pos != undefined ){
+			oNewPos.x += oShape.data.pos.x;
+			oNewPos.y += oShape.data.pos.y;
+		}
+
+		if( oShape.data != undefined && oShape.data.strokeStyle != undefined ){
+			this.oCanvas.strokeStyle = oShape.data.strokeStyle;
+		}else{
+			this.oCanvas.strokeStyle = this.oOptions.strokeStyle;
+		}
+
+
 		
 		// dessine la forme en fonction du type
-		if( oShape.type == '' ){
-			
+		if( oShape.type == 'circle' ){
+			this.oCanvas.beginPath();
+
+			//this.oCanvas.strokeStyle = 'blue';
+
+			this.oCanvas.arc( oNewPos.x, oNewPos.y, oShape.data.radius, 0, 2 * Math.PI);
+			this.oCanvas.stroke();
+		}else if( oShape.type == 'rectangle' ){
+			this.oCanvas.beginPath();
+			this.oCanvas.rect( oNewPos.x, oNewPos.y, oShape.data.width, oShape.data.height );
+			this.oCanvas.stroke();
+
+			//console.log( 'rrrrrrrrrrrrr' );
+			//console.log( [ oNewPos.x, oNewPos.y, oShape.data.width, oShape.data.height ] );
 		}
 		console.log( oShape.type );
 		
@@ -82,5 +112,8 @@ function jsgraphnode( sId, oProperties ){
 	// chargement des proprietes
 	if( oProperties != undefined ){
 		this.loadProperties( oProperties );
+		if( oProperties.options != undefined ){
+			this.oOptions = Object.assign( this.oOptions, oProperties.options );
+		}
 	}
 }
