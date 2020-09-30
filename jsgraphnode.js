@@ -1,13 +1,21 @@
 function jsgraphnode( sId, oProperties ){
 	
 	this.sId = sId;
-	this.oEle = document.getElementById( sId );
-	this.oCanvas = this.oEle.getContext( '2d' );
+	this.oSize = { width: 100, height: 100 };
+	this.oCSS = {};
+	//this.oEle = document.getElementById( sId );
+	//this.oCanvas = this.oEle.getContext( '2d' );
 	this.oShapes = {};
 	this.oElements = {};
-	this.oOptions = { strokeStyle: 'black' };
+	this.oOptions = { /*fill: 'black', lineWidth: 1, fillStyle: 'green'*/ };
+	this.oRefStyle = [ 'fill' /*'fill', 'lineWidth', 'fillStyle'*/ ];
 
-	this.oCanvas.strokeStyle = this.oOptions.strokeStyle;
+	for( var sStyle in this.oOptions ){
+		if( !this.oRefStyle.includes( sStyle ) ){
+			continue;
+		}
+		//this.oCanvas[ sStyle ] = this.oOptions[ sStyle ];
+	}
 
 	// ajout d'une reference de forme
 	this.addRefShape = function( sName, oShape ){
@@ -32,6 +40,7 @@ function jsgraphnode( sId, oProperties ){
 	
 	// dessine une forme
 	this.drawShape = function( oShape, oPos ){
+		var sHtml = '';
 
 		// determine la nouvelle position
 		var oNewPos = oPos;
@@ -40,44 +49,62 @@ function jsgraphnode( sId, oProperties ){
 			oNewPos.y += oShape.data.pos.y;
 		}
 
-		if( oShape.data != undefined && oShape.data.strokeStyle != undefined ){
-			this.oCanvas.strokeStyle = oShape.data.strokeStyle;
-		}else{
-			this.oCanvas.strokeStyle = this.oOptions.strokeStyle;
+		// pour les styles par defaut
+		var sStyle = '';
+		for( var sStyle in this.oOptions ){
+			if( !this.oRefStyle.includes( sStyle ) ){
+				continue;
+			}
+			console.log( "eeeeeeee" );
+			if( oShape.data != undefined && oShape.data[ sStyle ] != undefined ){
+				//this.oCanvas[ sStyle ] = oShape.data[ sStyle ];
+				sStyle += sStyle + '="' + oShape.data[ sStyle ] + '"';
+			}else{
+				//this.oCanvas[ sStyle ] = this.oOptions[ sStyle ];
+				sStyle += sStyle + '="' + this.oOptions[ sStyle ] + '"';
+				
+			}
 		}
 
-
+console.log( "tttttttttttttttttt" );
+		console.log( sStyle );
 		
 		// dessine la forme en fonction du type
 		if( oShape.type == 'circle' ){
-			this.oCanvas.beginPath();
+			/*this.oCanvas.beginPath();
 
-			//this.oCanvas.strokeStyle = 'blue';
+			
 
 			this.oCanvas.arc( oNewPos.x, oNewPos.y, oShape.data.radius, 0, 2 * Math.PI);
-			this.oCanvas.stroke();
+			this.oCanvas.stroke();*/
 		}else if( oShape.type == 'rectangle' ){
-			this.oCanvas.beginPath();
+			/*this.oCanvas.beginPath();
+			
 			this.oCanvas.rect( oNewPos.x, oNewPos.y, oShape.data.width, oShape.data.height );
-			this.oCanvas.stroke();
+			this.oCanvas.stroke();*/
 
 			//console.log( 'rrrrrrrrrrrrr' );
 			//console.log( [ oNewPos.x, oNewPos.y, oShape.data.width, oShape.data.height ] );
+
+			sHtml = '<rect width="' + oShape.data.width + '" height="' + oShape.data.height + '" x="' + oNewPos.x + '" y="' + oNewPos.y + '" fill="#008d46" />';
 		}
 		console.log( oShape.type );
+		console.log( sHtml );
 		
 		// pour les sous forme
 		if( oShape.shapes != undefined ){
 			for( var i=0; i<oShape.shapes.length; i++ ){
-				this.drawShape( oShape.shapes[ i ], oPos );
+				sHtml += this.drawShape( oShape.shapes[ i ], oPos );
 			}
 		}
+
+		return sHtml;
 	};
 	
 	// dessine un element
 	this.drawElement = function( oElement ){
 		
-		this.drawShape( oElement.shape, oElement.pos );
+		return this.drawShape( oElement.shape, oElement.pos );
 		
 		
 		//oElement.data.shapes
@@ -87,27 +114,56 @@ function jsgraphnode( sId, oProperties ){
 		
 	};
 	
-	// dessine le canvas
-	this.drawCanvas = function(){
+	// dessine le schema
+	this.drawSchema = function(){
 		
-		// efface les elements existants
-		this.oCanvas.clearRect( 0, 0, this.oEle.width, this.oEle.height );
+		
+		// determine le nouveau SVG
+		var sHtml = '';
+		//this.oCanvas.clearRect( 0, 0, this.oEle.width, this.oEle.height );
 		
 		// pour tous les elements
 		for( var sId in this.oElements ){
-			this.drawElement( this.oElements[ sId ] );
+			sHtml += this.drawElement( this.oElements[ sId ] );
 		}
+
+		console.log( 'fffffffffffffffff' );
+		console.log( sHtml );
+
+		// creation du style CSS
+		var sCSS = '';
+		if( Object.keys( this.oCSS ).length > 0 ){
+			for( var sStyle in this.oCSS ){
+				sCSS
+			}
+		}
+
+		// mise a jour du SVG
+		var oParentSvg = document.getElementById( this.sId );
+		oParentSvg.innerHTML = '<svg id="jsgraphnode-' + this.sId + '" xmlns="http://www.w3.org/2000/svg" width="' + this.oSize.width + '" height="' + this.oSize.height + '" viewBox="0 0 ' + this.oSize.width + ' ' + this.oSize.height + '">' +
+				sHtml +
+			'</svg>';
+		var oSvg = document.getElementById( 'jsgraphnode-' + this.sId );
+		if( Object.keys( this.oCSS ).length > 0 ){
+			for( var sStyle in this.oCSS ){
+				oSvg.style[ sStyle ] = this.oCSS[ sStyle ];
+			}
+		}
+
 	};
 	
 	// chargement des proprietes
 	this.loadProperties = function( oProperties ){
 		if( oProperties.css != undefined ){
-			for( var k in oProperties.css ){
-				this.oEle.style[ k ] = oProperties.css[ k ];
-			}
+			this.oCSS = oProperties.css;
+		}
+		if( oProperties.width != undefined ){
+			this.oSize.width = oProperties.width;
+		}
+		if( oProperties.height != undefined ){
+			this.oSize.height = oProperties.height;
 		}
 	};
-	
 	
 	// chargement des proprietes
 	if( oProperties != undefined ){
