@@ -4,23 +4,29 @@
 		<script src="jsgraphnode.js"></script>
 	</head>
 	<body>
-		<div>
+		<div id="first_gn"></div>
+		<!--<div>
 			<canvas id="first_gn"></canvas>
-		</div>
+		</div>-->
 		<script>
-			var oJGN = new jsgraphnode( 'first_gn', { css:{ width: '500px', height: '300px', border: '2px solid blue' },
+			var oJGN = new jsgraphnode( 'first_gn', { width: 600, height: 400, css:{ border: '2px solid blue' },
 				options:{}  } );
 				//options:{ strokeStyle: 'green' } } );
 			oJGN.addRefShape( 'start', {
 				type: 'circle',
-				data: { pos:{x:0, y:0}, radius:10, strokeStyle: 'orange' },
+				data: { pos:{x:0, y:0}, radius:10, fill: '#008d46' },
 				shapes:[
-					{type: 'rectangle', data: { pos:{x:-5, y:8}, width:10, height:5 } }
+					{type: 'rectangle', data: { pos:{x:-5, y:8}, width:50, height:80 } }
 				]
 			} );
 			oJGN.addElement( 'start', {x:50, y:30} );
 			
-			oJGN.drawCanvas();
+			oJGN.drawSchema();
 		</script>
+<svg xmlns="http://www.w3.org/2000/svg" width="150" height="100" viewBox="0 0 3 2">
+	<rect width="1" height="2" x="0" fill="#008d46" />
+	<rect width="1" height="2" x="1" fill="#ffffff" />
+	<rect width="1" height="2" x="2" fill="#d2232c" />
+</svg>
 	</body>
 </html>
