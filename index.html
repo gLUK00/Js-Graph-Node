@@ -9,10 +9,19 @@
 			<canvas id="first_gn"></canvas>
 		</div>-->
 		<script>
-			var oJGN = new jsgraphnode( 'first_gn', { width: 600, height: 400, css:{ border: '2px solid blue' },
+			var oJGN = new jsgraphnode( 'first_gn', { width: 600, height: 500, css:{ border: '2px solid blue' },
 				options:{}  } );
-				//options:{ strokeStyle: 'green' } } );
-			oJGN.addRefShape( 'start', {
+			oJGN.addRefShape( 'algo-start', {
+				type: 'circle',
+				data: { pos:{x:0, y:0}, radius:50, fill: '#fc7b03' },
+				shapes:[
+					{type: 'rectangle', data: { pos:{x:-10, y:35}, width:20, height:20, fill: '#629c78' } }
+				]
+			} );
+			oJGN.addElement( 'algo-start', {x:100, y:100} );
+
+
+			/*oJGN.addRefShape( 'algo-start', {
 				type: 'circle',
 				data: { pos:{x:0, y:0}, radius:50, fill: '#fc7b03' },
 				shapes:[
@@ -20,9 +29,11 @@
 					{type: 'rectangle', data: { pos:{x:-10, y:-10}, width:20, height:20, fill: 'transparent', 'stroke-width': '5' } },
 					{type: 'ellipse', data: { pos:{x:0, y:30}, width:20, height:5, stroke: 'red' } },
 					{type: 'line', data: { pos:{x:0, y:50}, width:50, height:0, stroke: 'orange' } },
+					{type: 'polyline', data: { pos:{x:0, y:50}, points:[ {x:0, y:0}, {x:20, y:-20}, {x:40, y:0} ], stroke: 'blue', 'stroke-width': '5' } },
+					{type: 'polygon', data: { pos:{x:0, y:70}, points:[ {x:0, y:0}, {x:20, y:-20}, {x:40, y:0} ], stroke: 'blue', 'stroke-width': '5' } },
+					{type: 'path', data: { pos:{x:0, y:80}, d: 'Q 95 10 180 80', stroke: 'black', fill: 'transparent' } },
 				]
-			} );
-			oJGN.addElement( 'start', {x:100, y:100} );
+			} );*/
 			
 			oJGN.drawSchema();
 		</script>

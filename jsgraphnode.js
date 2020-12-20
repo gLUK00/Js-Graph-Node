@@ -65,19 +65,12 @@ function jsgraphnode( sId, oProperties ){
 			if( !this.oRefStyle.includes( sOptStyle ) ){
 				continue;
 			}
-			console.log( "eeeeeeee" );
 			if( oShape.data != undefined && oShape.data[ sOptStyle ] != undefined ){
-				//this.oCanvas[ sStyle ] = oShape.data[ sStyle ];
 				sStyle += sOptStyle + '="' + oShape.data[ sOptStyle ] + '" ';
 			}else{
-				//this.oCanvas[ sStyle ] = this.oOptions[ sStyle ];
 				sStyle += sOptStyle + '="' + this.oOptions[ sOptStyle ] + '" ';
-				
 			}
 		}
-
-console.log( "tttttttttttttttttt" );
-		console.log( sStyle );
 		
 		// dessine la forme en fonction du type
 		if( oShape.type == 'circle' ){
@@ -96,11 +89,21 @@ console.log( "tttttttttttttttttt" );
 
 			sHtml = '<line x1="' + oNewPos.x + '" y1="' + oNewPos.y + '" x2="' + ( oNewPos.x + oShape.data.width ) + '" y2="' + ( oNewPos.y + oShape.data.height ) + '" ' + sStyle + ' />';
 
+		}else if( ( oShape.type == 'polyline' || oShape.type == 'polygon' ) && oShape.data.points != undefined ){
+
+			var sPoints = '';
+			for( var i=0; i < oShape.data.points.length; i++){
+				var oPosPoint = oShape.data.points[ i ];
+				sPoints += ( sPoints != '' ? ', ' : '' ) + ( oNewPos.x + oPosPoint.x ) + ' ' + ( oNewPos.y + oPosPoint.y );
+			}
+
+			sHtml = '<' + oShape.type + ' points="' + sPoints+ '" ' + sStyle + ' />';
+
+		}else if( oShape.type == 'path' && oShape.data.d != undefined ){
+
+			sHtml = '<path d="M' + oNewPos.x + ' ' + oNewPos.y + ' ' + oShape.data.d + '" ' + sStyle + ' />';
+
 		}
-
-
-		console.log( oShape.type );
-		console.log( sHtml );
 		
 		// pour les sous forme
 		if( oShape.shapes != undefined ){
