@@ -7,8 +7,8 @@ function jsgraphnode( sId, oProperties ){
 	//this.oCanvas = this.oEle.getContext( '2d' );
 	this.oShapes = {};
 	this.oElements = {};
-	this.oOptions = { /*fill: 'black', lineWidth: 1, fillStyle: 'green'*/ };
-	this.oRefStyle = [ 'fill' /*'fill', 'lineWidth', 'fillStyle'*/ ];
+	this.oOptions = { fill: 'green', stroke: 'blue', 'stroke-width': '1' /*lineWidth: 1, fillStyle: 'green'*/ };
+	this.oRefStyle = [ 'fill', 'stroke', 'stroke-width' /*'fill', 'lineWidth', 'fillStyle'*/ ];
 
 	for( var sStyle in this.oOptions ){
 		if( !this.oRefStyle.includes( sStyle ) ){
@@ -37,6 +37,16 @@ function jsgraphnode( sId, oProperties ){
 		// ajout de l'element
 		this.oElements[ oData.id ] = {shape: oShape, pos: oPos, data: oData };
 	};
+
+	// ajout des options visuelles
+	this._drawAddOption = function( sOption, oData ){
+
+
+
+		return oData[ sOption ] == undefined ?
+			'' :
+			sOption + '="' + oData[ sOption ] + '"';
+	};
 	
 	// dessine une forme
 	this.drawShape = function( oShape, oPos ){
@@ -51,17 +61,17 @@ function jsgraphnode( sId, oProperties ){
 
 		// pour les styles par defaut
 		var sStyle = '';
-		for( var sStyle in this.oOptions ){
-			if( !this.oRefStyle.includes( sStyle ) ){
+		for( var sOptStyle in this.oOptions ){
+			if( !this.oRefStyle.includes( sOptStyle ) ){
 				continue;
 			}
 			console.log( "eeeeeeee" );
-			if( oShape.data != undefined && oShape.data[ sStyle ] != undefined ){
+			if( oShape.data != undefined && oShape.data[ sOptStyle ] != undefined ){
 				//this.oCanvas[ sStyle ] = oShape.data[ sStyle ];
-				sStyle += sStyle + '="' + oShape.data[ sStyle ] + '"';
+				sStyle += sOptStyle + '="' + oShape.data[ sOptStyle ] + '" ';
 			}else{
 				//this.oCanvas[ sStyle ] = this.oOptions[ sStyle ];
-				sStyle += sStyle + '="' + this.oOptions[ sStyle ] + '"';
+				sStyle += sOptStyle + '="' + this.oOptions[ sOptStyle ] + '" ';
 				
 			}
 		}
@@ -71,23 +81,24 @@ console.log( "tttttttttttttttttt" );
 		
 		// dessine la forme en fonction du type
 		if( oShape.type == 'circle' ){
-			/*this.oCanvas.beginPath();
 
-			
+			sHtml = '<circle cx="' + oNewPos.x + '" cy="' + oNewPos.y + '" r="' + oShape.data.radius + '" ' + sStyle + ' />';
 
-			this.oCanvas.arc( oNewPos.x, oNewPos.y, oShape.data.radius, 0, 2 * Math.PI);
-			this.oCanvas.stroke();*/
 		}else if( oShape.type == 'rectangle' ){
-			/*this.oCanvas.beginPath();
-			
-			this.oCanvas.rect( oNewPos.x, oNewPos.y, oShape.data.width, oShape.data.height );
-			this.oCanvas.stroke();*/
 
-			//console.log( 'rrrrrrrrrrrrr' );
-			//console.log( [ oNewPos.x, oNewPos.y, oShape.data.width, oShape.data.height ] );
+			sHtml = '<rect width="' + oShape.data.width + '" height="' + oShape.data.height + '" x="' + oNewPos.x + '" y="' + oNewPos.y + '" ' + sStyle + ' />';
 
-			sHtml = '<rect width="' + oShape.data.width + '" height="' + oShape.data.height + '" x="' + oNewPos.x + '" y="' + oNewPos.y + '" fill="#008d46" />';
+		}else if( oShape.type == 'ellipse' ){
+
+			sHtml = '<ellipse cx="' + oNewPos.x + '" cy="' + oNewPos.y + '" rx="' + oShape.data.width + '" ry="' + oShape.data.height + '" ' + sStyle + ' />';
+
+		}else if( oShape.type == 'line' ){
+
+			sHtml = '<line x1="' + oNewPos.x + '" y1="' + oNewPos.y + '" x2="' + ( oNewPos.x + oShape.data.width ) + '" y2="' + ( oNewPos.y + oShape.data.height ) + '" ' + sStyle + ' />';
+
 		}
+
+
 		console.log( oShape.type );
 		console.log( sHtml );
 		

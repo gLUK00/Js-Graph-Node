@@ -14,12 +14,15 @@
 				//options:{ strokeStyle: 'green' } } );
 			oJGN.addRefShape( 'start', {
 				type: 'circle',
-				data: { pos:{x:0, y:0}, radius:10, fill: '#008d46' },
+				data: { pos:{x:0, y:0}, radius:50, fill: '#fc7b03' },
 				shapes:[
-					{type: 'rectangle', data: { pos:{x:-5, y:8}, width:50, height:80 } }
+					{type: 'rectangle', data: { pos:{x:-10, y:-10}, width:20, height:20, fill: '#629c78' } },
+					{type: 'rectangle', data: { pos:{x:-10, y:-10}, width:20, height:20, fill: 'transparent', 'stroke-width': '5' } },
+					{type: 'ellipse', data: { pos:{x:0, y:30}, width:20, height:5, stroke: 'red' } },
+					{type: 'line', data: { pos:{x:0, y:50}, width:50, height:0, stroke: 'orange' } },
 				]
 			} );
-			oJGN.addElement( 'start', {x:50, y:30} );
+			oJGN.addElement( 'start', {x:100, y:100} );
 			
 			oJGN.drawSchema();
 		</script>
@@ -28,5 +31,6 @@
 	<rect width="1" height="2" x="1" fill="#ffffff" />
 	<rect width="1" height="2" x="2" fill="#d2232c" />
 </svg>
+<!-- https://developer.mozilla.org/fr/docs/Web/SVG/Tutoriel/Formes_de_base -->
 	</body>
 </html>
